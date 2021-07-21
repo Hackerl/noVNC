@@ -144,7 +144,10 @@
         const host = readQueryVariable('host', window.location.hostname);
         let port = readQueryVariable('port', window.location.port);
         const password = readQueryVariable('password');
-        const path = readQueryVariable('path', 'websockify');
+        const path = readQueryVariable('path', 'ws/vnc');
+
+        const machine = readQueryVariable('machine');
+        const token = readQueryVariable('token');
 
         // | | |         | | |
         // | | | Connect | | |
@@ -163,7 +166,7 @@
         if(port) {
             url += ':' + port;
         }
-        url += '/' + path;
+        url += '/' + path + '/' + machine + '?token=' + token;
 
         // Creating a new RFB object will start a new connection
         rfb = new RFB(document.getElementById('screen'), url,

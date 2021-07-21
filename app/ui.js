@@ -166,10 +166,12 @@ const UI = {
         UI.initSetting('shared', true);
         UI.initSetting('view_only', false);
         UI.initSetting('show_dot', false);
-        UI.initSetting('path', 'websockify');
+        UI.initSetting('path', 'ws/vnc');
         UI.initSetting('repeaterID', '');
         UI.initSetting('reconnect', false);
         UI.initSetting('reconnect_delay', 5000);
+        UI.initSetting('machine', '');
+        UI.initSetting('token', '');
 
         UI.setupSettingLabels();
     },
@@ -360,6 +362,8 @@ const UI = {
         UI.addSettingChangeHandler('logging', UI.updateLogging);
         UI.addSettingChangeHandler('reconnect');
         UI.addSettingChangeHandler('reconnect_delay');
+        UI.addSettingChangeHandler('machine');
+        UI.addSettingChangeHandler('token');
     },
 
     addFullscreenHandlers() {
@@ -422,6 +426,8 @@ const UI = {
             UI.disableSetting('port');
             UI.disableSetting('path');
             UI.disableSetting('repeaterID');
+            UI.disableSetting('machine');
+            UI.disableSetting('token');
 
             // Hide the controlbar after 2 seconds
             UI.closeControlbarTimeout = setTimeout(UI.closeControlbar, 2000);
@@ -432,6 +438,8 @@ const UI = {
             UI.enableSetting('port');
             UI.enableSetting('path');
             UI.enableSetting('repeaterID');
+            UI.enableSetting('machine');
+            UI.enableSetting('token');
             UI.updatePowerButton();
             UI.keepControlbar();
         }
@@ -845,6 +853,8 @@ const UI = {
         UI.updateSetting('logging');
         UI.updateSetting('reconnect');
         UI.updateSetting('reconnect_delay');
+        UI.updateSetting('machine');
+        UI.updateSetting('token');
 
         document.getElementById('noVNC_settings')
             .classList.add("noVNC_open");
@@ -991,6 +1001,8 @@ const UI = {
         const host = UI.getSetting('host');
         const port = UI.getSetting('port');
         const path = UI.getSetting('path');
+        const machine = UI.getSetting('machine');
+        const token = UI.getSetting('token');
 
         if (typeof password === 'undefined') {
             password = WebUtil.getConfigVar('password');
@@ -1021,7 +1033,7 @@ const UI = {
         if (port) {
             url += ':' + port;
         }
-        url += '/' + path;
+        url += '/' + path + '/' + machine + '?token=' + token;
 
         UI.rfb = new RFB(document.getElementById('noVNC_container'), url,
                          { shared: UI.getSetting('shared'),
